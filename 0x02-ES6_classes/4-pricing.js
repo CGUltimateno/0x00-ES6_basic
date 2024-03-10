@@ -35,21 +35,25 @@ export default class Pricing {
   }
 
   displayFullPrice() {
-    // eslint-disable-next-line no-underscore-dangle
-    return `${this._amount} (${this._currency.displayFullCurrency()})`;
+    return `${this.amount} ${this.currency.displayFullCurrency()}`;
   }
 
   // eslint-disable-next-line class-methods-use-this
-  validateNumber(value, name) {
+  validateNumber(value, propertyName) {
     if (typeof value !== 'number') {
-      throw new Error(`${name} must be a number`);
+      throw new Error(`${propertyName} must be a number`);
     }
   }
 
   // eslint-disable-next-line class-methods-use-this
-  validateCurrency(value, name) {
+  // eslint-disable-next-line class-methods-use-this
+  validateCurrency(value, propertyName) {
     if (!(value instanceof Currency)) {
-      throw new Error(`${name} must be a Currency`);
+      throw new Error(`${propertyName} must be a currency`);
     }
+  }
+
+  static convertPrice(amount, conversionRate) {
+    return amount * conversionRate;
   }
 }

@@ -1,9 +1,11 @@
-// eslint-disable-next-line no-unused-vars
 class Car {
   constructor(brand, motor, color) {
-    this.brand = brand;
-    this.motor = motor;
-    this.color = color;
+    // eslint-disable-next-line no-underscore-dangle
+    this._brand = brand;
+    // eslint-disable-next-line no-underscore-dangle
+    this._motor = motor;
+    // eslint-disable-next-line no-underscore-dangle
+    this._color = color;
   }
 
   cloneCar() {
@@ -11,3 +13,5 @@ class Car {
     return new this.constructor(this._brand, this._motor, this._color);
   }
 }
+
+export default Car;
