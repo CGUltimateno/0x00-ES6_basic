@@ -2,12 +2,8 @@ import Currency from './3-currency';
 
 export default class Pricing {
   constructor(amount, currency) {
-    if (typeof amount !== 'number') {
-      throw new TypeError('amount must be a number');
-    }
-    if (!(currency instanceof Currency)) {
-      throw new TypeError('currency must be a Currency');
-    }
+    this.validateNumber(amount, 'Amount');
+    this.validateCurrency(currency, 'Currency');
     // eslint-disable-next-line no-underscore-dangle
     this._amount = amount;
     // eslint-disable-next-line no-underscore-dangle
@@ -24,26 +20,36 @@ export default class Pricing {
     return this._currency;
   }
 
-    // eslint-disable-next-line grouped-accessor-pairs
+  // eslint-disable-next-line grouped-accessor-pairs
   set amount(newAmount) {
-    if (typeof newAmount !== 'number') {
-      throw new TypeError('amount must be a number');
-    }
+    this.validateNumber(newAmount, 'Amount');
     // eslint-disable-next-line no-underscore-dangle
     this._amount = newAmount;
   }
 
-    // eslint-disable-next-line grouped-accessor-pairs
+  // eslint-disable-next-line grouped-accessor-pairs
   set currency(newCurrency) {
-    if (!(newCurrency instanceof Currency)) {
-      throw new TypeError('currency must be a Currency');
-    }
+    this.validateCurrency(newCurrency, 'Currency');
     // eslint-disable-next-line no-underscore-dangle
-    this._currency = newCurrency;
+    this._amount = newCurrency;
   }
 
   displayFullPrice() {
     // eslint-disable-next-line no-underscore-dangle
     return `${this._amount} (${this._currency.displayFullCurrency()})`;
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  validateNumber(value, name) {
+    if (typeof value !== 'number') {
+      throw new Error(`${name} must be a number`);
+    }
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  validateCurrency(value, name) {
+    if (!(value instanceof Currency)) {
+      throw new Error(`${name} must be a Currency`);
+    }
   }
 }
