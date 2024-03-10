@@ -1,4 +1,4 @@
-// eslint-disable-next-line import/prefer-default-export
+// eslint-disable-next-line max-classes-per-file
 export class HolbertonClass {
   constructor(year, location) {
     // eslint-disable-next-line no-underscore-dangle
@@ -19,17 +19,13 @@ export class HolbertonClass {
 }
 
 export class StudentHolberton {
-  constructor(firstName, lastName) {
-    if (typeof firstName !== 'string') {
-      throw new TypeError('firstName must be a string');
-    }
-    if (typeof lastName !== 'string') {
-      throw new TypeError('lastName must be a string');
-    }
+  constructor(firstName, lastName, holbertonClass) {
     // eslint-disable-next-line no-underscore-dangle
     this._firstName = firstName;
     // eslint-disable-next-line no-underscore-dangle
     this._lastName = lastName;
+    // eslint-disable-next-line no-underscore-dangle
+    this._holbertonClass = holbertonClass;
   }
 
   get fullName() {
