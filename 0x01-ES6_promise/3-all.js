@@ -1,4 +1,5 @@
-import { uploadPhoto, createUser } from './utils.js';
+// eslint-disable-next-line import/extensions,import/no-unresolved
+import { uploadPhoto, createUser } from './utils';
 
 export default function handleProfileSignup() {
   return Promise.all([uploadPhoto(), createUser()])
