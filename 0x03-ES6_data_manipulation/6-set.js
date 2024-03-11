@@ -1,1 +1,7 @@
-#!/usr/bin/node
+/**
+ *  creates a new set of arrays
+ */
+
+const setFromArray = (arr) => new Set(arr);
+
+export default setFromArray;
