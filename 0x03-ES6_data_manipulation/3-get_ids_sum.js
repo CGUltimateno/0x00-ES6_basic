@@ -3,6 +3,8 @@
  */
 
 const getStudentIdsSum = (students) => (
-  students.reduce((prev, curr) => (prev + curr.id), 0));
-
+  students.reduce((prev, next) => (
+    prev + next.id
+  ), 0)
+);
 export default getStudentIdsSum;
