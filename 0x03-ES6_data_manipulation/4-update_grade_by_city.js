@@ -8,8 +8,7 @@ const updateStudentGradeByCity = (students, city, grades) => (
     if (student.location === city) {
       student.grade = 'N/A';
       grades.map((grade) => {
-        if (student.id === grade.studentId)
-            student.grade = grade.grade;
+        if (student.id === grade.studentId) student.grade = grade.grade;
         return (grade);
       });
       return (student);
