@@ -1,1 +1,14 @@
-#!/usr/bin/node
+/**
+ *  returns a list of students. each student is an object with the following properties:
+ *  - id: number
+ *   - first: string
+ *   - location: string
+ */
+
+const getListStudents = () => ([
+  { id: 1, firstName: 'Guillaume', location: 'San Francisco' },
+  { id: 2, firstName: 'James', location: 'Columbia' },
+  { id: 5, firstName: 'Serena', location: 'San Francisco' },
+]);
+
+export default getListStudents;
