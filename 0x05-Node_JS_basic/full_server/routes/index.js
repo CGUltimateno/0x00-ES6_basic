@@ -6,15 +6,10 @@ import StudentsController from "../controllers/StudentsController";
  */
 
 const routes = (app) => {
-    app.get('/', (req, res) => {
-        AppController.getHome(req, res);
-    });
+    app.get('/', AppController.getHomepage);
+    app.get('/students', StudentsController.getAllStudents);
+    app.get('/students/:major', StudentsController.getAllStudentsByMajor);
+  };
 
-    app.get('/students', (req, res) => {
-        StudentsController.getAllStudents(res);
-    });
-
-    app.get('/students/:major', (req, res) => {
-        StudentsController.getAllStudentsByMajor(res, req.params.major);
-    });
-}
+export default routes;
+modules.export = routes;

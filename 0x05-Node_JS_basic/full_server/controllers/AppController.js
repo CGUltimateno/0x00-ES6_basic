@@ -4,9 +4,7 @@
  */
 class AppController {
     static getHome(req, res) {
-        res.statusCode = 200;
-        res.setHeader('Content-Type', 'text/plain');
-        res.end('Hello Holberton School!');
+        response.status(200).send('Hello Holberton School!');
     }
 }
 
