@@ -1,10 +1,17 @@
 const http = require('http');
+const PORT = 1245;
+const app = http.createServer();
 
-const server = http.createServer((req, res) => {
-    res.write('Hello Holberton School!');
-    res.end();
+app.on('request', (req, res) => {
+    if (req.method === 'GET' && req.url === '/') {
+        res.statusCode = 200;
+        res.setHeader('Content-Type', 'text/plain');
+        res.end('Hello Holberton School!');
+    }
+    });
+
+app.listen(PORT, HOST, () => {
+    process.stdout.write(`Server running at http://${HOST}:${PORT}`);
 });
-
-const app = server.listen(1245);
 
 module.exports = app;

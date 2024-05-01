@@ -1,63 +1,83 @@
 const fs = require('fs');
 const http = require('http');
-const url = require('url');
 
+const PORT = 1245;
+const HOST = 'localhost';
+const app = http.createServer();
 const DB_FILE = process.argv.length > 2 ? process.argv[2] : '';
 
-function countStudents(path) {
-    const res = [];
-    return new Promise((resolve, reject) => {
-        fs.readFile(path, 'utf8', (err, data) => {
-            if (err) {
-                reject(Error('Cannot load the database'));
-                return;
-            }
-            const lines = data.split('\n').filter((line) => line.length > 0);
-            console.log(`Number of students: ${lines.length}`);
-            lines.forEach((line) => {
-                const student = line.split(',');
-                if (student.length === 4) {
-                    res.push({
-                        firstname: student[0],
-                        lastname: student[1],
-                        age: student[2],
-                        field: student[3],
-                    });
-                }
-            });
-            res.shift();
-            console.log(`List: ${res.map((s) => s.firstname).join(', ')}`);
-            resolve();
-        });
-    }
-
-    );
-}
-
-
-const app = http.createServer((req, res) => {
-    const q = url.parse(req.url, true);
-    if (q.pathname === '/students') {
-        if (req.method === 'GET') {
-            countStudents(DB_FILE)
-                .then(() => {
-                    res.writeHead(200, { 'Content-Type': 'text/plain' });
-                    res.write('This is the list of our students\n');
-                    res.end();
-                })
-                .catch((error) => {
-                    res.writeHead(500, { 'Content-Type': 'text/plain' });
-                    res.write(error.message);
-                    res.end();
-                });
+/**
+ * Function that counts the number of students in a database
+ * @param {string} path - Path to the database
+ * @returns {Promise} - Promise object represents the number of students
+ 
+ */
+const countStudents = (dataPath) => new Promise((resolve, reject) => {
+    fs.readFile(dataPath, 'utf8', (err, data) => {
+        if (err) {
+            reject(Error('Cannot load the database'));
+            return;
         }
-    } else {
-        res.writeHead(404, { 'Content-Type': 'text/plain' });
-        res.write('Invalid request');
-        res.end();
-    }
+        const fileLines = data.trim().split('\n');
+        const studentGroups = {};
+        const dbFieldNames = fileLines[0].split(',');
+        const studentPropNames = dbFieldNames.slice(0, dbFieldNames.length - 1);
+
+        for (const line of fileLines.slice(1)) {
+            const studentRecord = line.split(',');
+            const studentPropValues = studentRecord.slice(0, studentRecord.length - 1);
+            const field = studentRecord[studentRecord.length - 1];
+            if (!Object.keys(studentGroups).includes(field)) {
+                studentGroups[field] = [];
+            }
+            const studentEntries = studentPropNames
+                .map((propName, idx) => [propName, studentPropValues[idx]]);
+            studentGroups[field].push(Object.fromEntries(studentEntries));
+        }
+
+        const totalStudents = Object
+            .values(studentGroups)
+            .reduce((pre, cur) => (pre || []).length + cur.length);
+        console.log(`Number of students: ${totalStudents}`);
+        for (const [field, group] of Object.entries(studentGroups)) {
+            const studentNames = group.map((student) => student.firstname).join(', ');
+            console.log(`Number of students in ${field}: ${group.length}. List: ${studentNames}`);
+        }
+        resolve();
+    });
 });
 
-app.listen(1245);
+const SERVER_ROUTE_HANDLERS = [
+    {
+    route: '/',
+    handler(_, res) {
+        const responseText = 'Hello Holberton School!';
+  
+        res.setHeader('Content-Type', 'text/plain');
+        res.setHeader('Content-Length', responseText.length);
+        res.statusCode = 200;
+        res.write(Buffer.from(responseText));
+      },
+    },
+    {
+    route: '/students',
+    handler(_, res) {
+        countStudents(DB_FILE)
+        .then(() => {
+            res.setHeader('Content-Type', 'text/plain');
+            res.statusCode = 200;
+            res.end();
+        })
+        .catch((err) => {
+            res.setHeader('Content-Type', 'text/plain');
+            res.statusCode = 500;
+            res.end(err.message);
+        });
+    },
+];
+
+app.listen(PORT, HOST, () => {
+    process.stdout.write(`Server running at http://${HOST}:${PORT}`);
+});
 
 module.exports = app;
